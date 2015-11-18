@@ -31,17 +31,17 @@ public class AutoProbeJob implements Job{
 			try {
 				boolean status = probe();
 				if(!status){
-					System.out.println("****  Start logging in  ****");
+					System.out.println("****  Start logging in  ["+new Date()+"]  ****");
 					postLogin(userName, passwd);
 				}
 			} catch (UnknownHostException e) {
-				System.out.println("****  GET ERROR: Start logging in  ****");
+				System.out.println("****  GET ERROR: Start logging in  ["+new Date()+"]  ****");
 				postLogin(userName, passwd);
 			} catch (IOException e) {
-				System.out.println("****  GET ERROR: Start logging in  ****");
+				System.out.println("****  GET ERROR: Start logging in  ["+new Date()+"]  ****");
 				postLogin(userName, passwd);
 			} catch (Exception e){
-				System.out.println("****  GET ERROR: Start logging in  ****");
+				System.out.println("****  GET ERROR: Start logging in  ["+new Date()+"]  ****");
 				postLogin(userName, passwd);
 				}
 		}catch(Exception ee){
@@ -65,7 +65,7 @@ public class AutoProbeJob implements Job{
 		String r = NetUtils.post(url, String.format("usrname=%s&usrpwd=%s", name,pwd));
 		if(r.contains("on-line") || r.contains("Please keep this window opening and press button for exit!")){
 			status = true;
-			System.out.println("****  " + new Date() + " -- login Success  ****");
+			System.out.println("****  login Success  ["+new Date()+"]  ****");
 		}
 	}
 

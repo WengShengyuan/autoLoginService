@@ -18,28 +18,34 @@ public class APP {
 		String userName;
 		String passwd ;		
 		boolean debug = false;
-		if(args.length == 2) {
-			ip = "192.168.100.253";
-			port = "5280";
-			userName = args[0];
-			passwd = args[1];	
-			debug = false;
-		} else if(args.length == 3 ){
-			System.out.println("**** Debug Mode ****");
-			ip = "192.168.100.253";
-			port = "5280";
-			userName = args[0];
-			passwd = args[1];	
-			debug = true;
-			if(args[2].equals("browser")){
-				System.out.println("**** Opening Browser ****");
-				new MySysClient().linuxExcute(String.format("http://192.168.100.253:7755/login.cgi?act=login&s=%s&p=%s&usrname=%s&usrpwd=%s",
-						ip, port, userName.toUpperCase(), passwd));
+//		if(args.length == 2) {
+			try {
+				ip = "192.168.100.253";
+				port = "5280";
+				userName = args[0];
+				passwd = args[1];	
+				debug = false;
+			} catch (Exception e) {
+				System.out.println(String.format("Program ERROR:%s\n exit!", e));
+				return ;
 			}
-			
-		} else  {
-			return;
-		}
+//		} else if(args.length == 3 ){
+//			System.out.println("**** Debug Mode ****");
+//			ip = "192.168.100.253";
+//			port = "5280";
+//			userName = args[0];
+//			passwd = args[1];	
+//			debug = true;
+//			if(args[2].equals("browser")){
+//				System.out.println("**** Opening Browser ****");
+//				new MySysClient().linuxExcute(String.format("http://192.168.100.253:7755/login.cgi?act=login&s=%s&p=%s&usrname=%s&usrpwd=%s",
+//						ip, port, userName.toUpperCase(), passwd));
+//			}
+//			
+//		} else  {
+//			System.out.println("exit");
+//			return;
+//		}
 		
 		StringBuilder argsStr = new StringBuilder("args: ");
 		for(String o : args) {
