@@ -31,17 +31,17 @@ public class AutoProbeJob implements Job{
 			try {
 				boolean status = probe();
 				if(!status){
-					System.out.println("****  Start logging in  ["+new Date()+"]  ****");
+					System.out.println("****  ["+new Date()+"]  Start logging in  ****");
 					postLogin(userName, passwd);
 				}
 			} catch (UnknownHostException e) {
-				System.out.println("****  GET ERROR: Start logging in  ["+new Date()+"]  ****");
+				System.out.println("****  ["+new Date()+"]  GET ERROR: Start logging in  ****");
 				postLogin(userName, passwd);
 			} catch (IOException e) {
-				System.out.println("****  GET ERROR: Start logging in  ["+new Date()+"]  ****");
+				System.out.println("****  ["+new Date()+"]  GET ERROR: Start logging in  ****");
 				postLogin(userName, passwd);
 			} catch (Exception e){
-				System.out.println("****  GET ERROR: Start logging in  ["+new Date()+"]  ****");
+				System.out.println("****  ["+new Date()+"]  GET ERROR: Start logging in  ****");
 				postLogin(userName, passwd);
 				}
 		}catch(Exception ee){
@@ -63,6 +63,7 @@ public class AutoProbeJob implements Job{
 		String url = "http://192.168.100.253:5280/login";
 		boolean status = false;
 		String r = NetUtils.post(url, String.format("usrname=%s&usrpwd=%s", name,pwd));
+		System.out.println("HTTP POST GET:\n"+r+"\n\n");
 		if(r.contains("on-line") || r.contains("Please keep this window opening and press button for exit!")){
 			status = true;
 			System.out.println("****  login Success  ["+new Date()+"]  ****");
