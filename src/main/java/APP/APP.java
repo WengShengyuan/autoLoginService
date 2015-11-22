@@ -17,13 +17,15 @@ public class APP {
 		String port ;
 		String userName;
 		String passwd ;		
+		String writePath;
 		boolean debug = false;
 //		if(args.length == 2) {
 			try {
 				ip = "192.168.100.253";
 				port = "5280";
 				userName = args[0];
-				passwd = args[1];	
+				passwd = args[1];
+				writePath = args[2];
 				debug = false;
 				
 				StringBuilder argsStr = new StringBuilder("args: ");
@@ -32,14 +34,14 @@ public class APP {
 				}
 				System.out.println(argsStr);
 				
-				AutoLoginScheduler.getInstance().scheduleProbe(ip, port, userName, passwd, debug);
+				AutoLoginScheduler.getInstance().scheduleProbe(ip, port, userName, passwd, debug, writePath);
 //				AutoLoginScheduler.getInstance().schedulePost(probeIp, port, userName, passwd);
 //				AutoLoginScheduler.getInstance().scheduleAutoKillBrowser();
 				
 				AutoLoginScheduler.getInstance().getScheduler().start();
 				
 			} catch (Exception e) {
-				System.out.println(String.format("Program ERROR:%s\n exit!", e));
+				System.out.println(String.format("PARAM ERROR:%s\n exit!", e));
 				return ;
 //				AutoLoginScheduler.getInstance().scheduleProbe("192.168.100.253", "5280", "S1307", "123123", false);
 //				AutoLoginScheduler.getInstance().getScheduler().start();

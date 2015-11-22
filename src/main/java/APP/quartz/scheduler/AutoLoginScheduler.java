@@ -36,13 +36,14 @@ public class AutoLoginScheduler {
 		scheduler = schedulerFactory.getScheduler();
 	}
 	
-	public void scheduleProbe(String ip, String port, String userName, String passwd, boolean debug) throws SchedulerException {
+	public void scheduleProbe(String ip, String port, String userName, String passwd, boolean debug, String writePath) throws SchedulerException {
 		
 		JobDetail jobDetail = JobBuilder.newJob().ofType(AutoProbeJob.class)
 				.usingJobData("ip", ip)
 				.usingJobData("port", port)
 				.usingJobData("userName", userName)
 				.usingJobData("passwd", passwd)
+				.usingJobData("writePath",writePath)
 				.withIdentity("probe", "autoLogin")
 				.build();
 		
@@ -50,7 +51,7 @@ public class AutoLoginScheduler {
 		
 		if(debug){
 			trigger = TriggerBuilder.newTrigger()
-					.withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
+					.withSchedule(CronScheduleBuilder.cronSchedule("0/1 * * * * ?"))
 					.forJob("probe", "autoLogin")
 					.build();
 		} else {
