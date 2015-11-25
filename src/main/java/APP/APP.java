@@ -1,7 +1,8 @@
 package APP;
 
+import java.util.Date;
+
 import APP.quartz.scheduler.AutoLoginScheduler;
-import APP.utils.MySysClient;
 
 
 
@@ -33,7 +34,7 @@ public class APP {
 					argsStr.append(o + "; ");
 				}
 				System.out.println(argsStr);
-				
+				System.out.println(String.format("Program Start Time:%s", new Date()));
 				AutoLoginScheduler.getInstance().scheduleProbe(ip, port, userName, passwd, debug, writePath);
 //				AutoLoginScheduler.getInstance().schedulePost(probeIp, port, userName, passwd);
 //				AutoLoginScheduler.getInstance().scheduleAutoKillBrowser();

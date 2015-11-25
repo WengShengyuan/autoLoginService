@@ -83,6 +83,7 @@ public class AutoProbeJob implements Job{
 	private void writePath(String writePath,String content) {
 		OutputStream out=null;
 		try {
+			content = content.replace("<title>Login</title>", String.format("<title>createDate[%s]</title>", new Date()));
 			File outFile = new File(writePath);
 			out= new FileOutputStream(outFile,false);
 			IOUtils.write(content+"\n", out, "UTF-8");
