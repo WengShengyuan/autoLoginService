@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import org.quartz.SchedulerException;
 
 import APP.quartz.scheduler.AutoLoginScheduler;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.Window.Type;
 
 public class MainWindow {
 
@@ -62,6 +64,8 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setResizable(false);
+		frame.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 		frame.setTitle("自动登陆程序");
 		frame.setBounds(100, 100, 450, 172);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
