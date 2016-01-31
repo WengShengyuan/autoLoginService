@@ -6,7 +6,10 @@ import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,11 +21,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import org.apache.commons.io.IOUtils;
 import org.quartz.SchedulerException;
 
 import APP.quartz.scheduler.AutoLoginScheduler;
+
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.Window.Type;
+
+import javax.swing.JSeparator;
 
 public class MainWindow {
 
@@ -130,12 +137,8 @@ public class MainWindow {
 		button.setBounds(33, 79, 130, 39);
 		frame.getContentPane().add(button);
 
-		Component verticalStrut = Box.createVerticalStrut(20);
-		verticalStrut.setBounds(173, 0, 26, 133);
-		frame.getContentPane().add(verticalStrut);
-
 		JLabel lblNewLabel = new JLabel("最后检测时间");
-		lblNewLabel.setBounds(192, 10, 84, 15);
+		lblNewLabel.setBounds(192, 26, 84, 15);
 		frame.getContentPane().add(lblNewLabel);
 
 		JLabel label_2 = new JLabel("登陆状态");
@@ -144,7 +147,7 @@ public class MainWindow {
 
 		tb_lastCheck = new JTextField();
 		tb_lastCheck.setEditable(false);
-		tb_lastCheck.setBounds(286, 7, 138, 21);
+		tb_lastCheck.setBounds(286, 23, 138, 21);
 		frame.getContentPane().add(tb_lastCheck);
 		tb_lastCheck.setColumns(10);
 
