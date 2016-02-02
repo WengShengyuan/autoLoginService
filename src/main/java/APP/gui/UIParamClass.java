@@ -21,6 +21,7 @@ public class UIParamClass {
 	public static final String STATUS_SUCCESS="在线中...";
 	public static final String STATUS_LOGGING="登录中...";
 	
+	private String outputLine = "";
 	private String checkStatus = STATUS_ERR;
 	private String lastCheckDate = "";
 	public String getCheckStatus() {
@@ -35,4 +36,11 @@ public class UIParamClass {
 	public void setLastCheckDate(String lastCheckDate) {
 		this.lastCheckDate = lastCheckDate;
 	}
+	public String getOutputLine() {
+		return outputLine;
+	}
+	public void setOutputLine(String outputLine) {
+		this.outputLine = outputLine;
+	}
+	
 }

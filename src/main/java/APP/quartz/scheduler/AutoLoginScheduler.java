@@ -64,7 +64,7 @@ public class AutoLoginScheduler {
 					.build();
 		} else {
 			trigger = TriggerBuilder.newTrigger()
-					.withSchedule(CronScheduleBuilder.cronSchedule("0 0/2 * * * ?"))
+					.withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
 					.forJob("probe", "autoLogin")
 					.build();
 		}

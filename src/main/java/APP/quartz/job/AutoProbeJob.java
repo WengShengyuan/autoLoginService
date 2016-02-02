@@ -15,6 +15,7 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.SchedulerException;
 
 import APP.gui.UIParamClass;
 import APP.utils.NetUtils;
@@ -66,11 +67,14 @@ public class AutoProbeJob implements Job{
 		String s = NetUtils.get("http://www.baidu.com", "UTF-8");
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		UIParamClass.getInstance().setLastCheckDate(sdf.format(new Date()));
+		UIParamClass.getInstance().setOutputLine("开始检测百度可访问性...");
 		if(s.contains("192.168.100.253:7755")){
 			UIParamClass.getInstance().setCheckStatus(UIParamClass.STATUS_ERR);
+			UIParamClass.getInstance().setOutputLine("返回HTML包含登陆地址.");
 			return false;
 		} else {
 			UIParamClass.getInstance().setCheckStatus(UIParamClass.STATUS_SUCCESS);
+			UIParamClass.getInstance().setOutputLine("互联网可访问.");
 			return true;
 		}
 	}
@@ -78,13 +82,16 @@ public class AutoProbeJob implements Job{
 	private void postLogin(String name, String pwd, String writePath) throws Exception{
 		String url = "http://192.168.100.253:5280/login";
 		boolean status = false;
+		UIParamClass.getInstance().setOutputLine("准备发起登陆请求.URL:"+url);
 		String r = NetUtils.post(url, String.format("usrname=%s&usrpwd=%s", name,pwd));
 		System.out.println("HTTP POST GET:\n"+r+"\n\n");
 		if(r.contains("on-line") || r.contains("Please keep this window opening and press button for exit!")){
 			status = true;
 			UIParamClass.getInstance().setCheckStatus(UIParamClass.STATUS_SUCCESS);
+			UIParamClass.getInstance().setOutputLine("登陆成功");
 			System.out.println("****  ["+new Date()+"]  login Success  ****");
 			if(r.contains("Please keep this window opening and press button for exit!")){
+				UIParamClass.getInstance().setOutputLine("第一次登陆成功，写入文件："+writePath);
 				System.out.println("****  ["+new Date()+"]  writting HTML to:"+writePath+"  ****");
 				writePath(writePath,r);
 			}
@@ -99,7 +106,12 @@ public class AutoProbeJob implements Job{
 			out= new FileOutputStream(outFile,false);
 			IOUtils.write(content+"\n", out, "UTF-8");
 			out.close();
+			UIParamClass.getInstance().setOutputLine("写入文件成功:"+writePath);
 		} catch (Exception e) {
+			try {
+				UIParamClass.getInstance().setOutputLine("写入文件失败："+writePath+"."+e.toString());
+			} catch (SchedulerException e1) {
+			}
 			System.out.println("****  ["+new Date()+"]  write HTML fail  ****");
 		} 
 	}
