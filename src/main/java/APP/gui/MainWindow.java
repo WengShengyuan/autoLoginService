@@ -104,8 +104,7 @@ public class MainWindow {
 						setTimerStop();
 						AutoLoginScheduler.getInstance().unScheduleProbe();
 					} catch (SchedulerException e) {
-						JOptionPane errorMsg = new JOptionPane();
-						errorMsg.showMessageDialog(null, e, "错误",
+						JOptionPane.showMessageDialog(null, e, "错误",
 								JOptionPane.WARNING_MESSAGE);
 					}
 				} else {
@@ -127,8 +126,7 @@ public class MainWindow {
 					} catch (Exception e) {
 						setTimerStop();
 						button.setText("开始探测");
-						JOptionPane errorMsg = new JOptionPane();
-						errorMsg.showMessageDialog(null, e, "错误",
+						JOptionPane.showMessageDialog(null, e, "错误",
 								JOptionPane.WARNING_MESSAGE);
 					}
 				}
@@ -163,8 +161,7 @@ public class MainWindow {
 			public void mouseClicked(MouseEvent arg0) {
 				File f = new File("./logout.html");
 				if(!f.exists()){
-					JOptionPane errorMsg = new JOptionPane();
-					errorMsg.showMessageDialog(null, "登出文件不存在", "错误",
+					JOptionPane.showMessageDialog(null, "登出文件不存在", "错误",
 							JOptionPane.WARNING_MESSAGE);
 					return;
 				}
@@ -172,8 +169,7 @@ public class MainWindow {
 					desktop = Desktop.getDesktop();
 					desktop.open(f);
 				} catch (Exception e) {
-					JOptionPane errorMsg = new JOptionPane();
-					errorMsg.showMessageDialog(null, e, "错误",
+					JOptionPane.showMessageDialog(null, e, "错误",
 							JOptionPane.WARNING_MESSAGE);
 				}
 			}
