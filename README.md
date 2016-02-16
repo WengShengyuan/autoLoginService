@@ -11,6 +11,7 @@
 Export Runnable Jar.
 
 主类: APP.java
+新增GUI界面:主类 MainWindow.java
 
 ## 使用
 
