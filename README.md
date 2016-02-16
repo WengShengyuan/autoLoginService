@@ -26,3 +26,7 @@ Export Runnable Jar.
 Linux环境下，在rc.local中增加自动运行脚本即可。
 
 `java -jar /home/user/java/loginService/loginService.jar USERNAME PASSWORD`
+
+### 直接运行RunnableJar
+
+目前主类为MainWindow.java
