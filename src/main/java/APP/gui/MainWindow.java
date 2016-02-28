@@ -17,11 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
-import org.quartz.SchedulerException;
-
-import APP.quartz.scheduler.AutoLoginScheduler;
 import javax.swing.SwingConstants;
+
+import APP.worker.Login;
+import APP.worker.Prob;
 
 public class MainWindow {
 
@@ -33,11 +32,19 @@ public class MainWindow {
 	private JTextField tb_status;
 
 	JLabel lb_output;
-	
+
 	private static Desktop desktop;
 	private boolean inDetect = false;
-	private Timer timeAction = new Timer();
+	private Timer UITimer = new Timer();
+	private Timer probeTimer = new Timer();
 	private JLabel lb_time;
+
+	private String userName = "";
+	private String password = "";
+	private String ip = "192.168.100.253";
+	private String port = "5280";
+	private String writePath = "./logout.html";
+
 	/**
 	 * Launch the application.
 	 */
@@ -100,34 +107,27 @@ public class MainWindow {
 				if (inDetect) {
 					button.setText("开始探测");
 					inDetect = false;
-					try {
-						setTimerStop();
-						AutoLoginScheduler.getInstance().unScheduleProbe();
-					} catch (SchedulerException e) {
-						JOptionPane.showMessageDialog(null, e, "错误",
-								JOptionPane.WARNING_MESSAGE);
-					}
+					stopTimer(UITimer);
+					stopTimer(probeTimer);
+					lb_output.setText("线程终止。");
 				} else {
 					button.setText("探测中...");
-					setTimerRefresh();
+					startUITimer(1000L);
 					inDetect = true;
 					try {
 						StringBuilder sb = new StringBuilder();
 						char[] ps = tb_password.getPassword();
-						for(char p : ps){
+						for (char p : ps) {
 							sb.append(p);
 						}
-						AutoLoginScheduler.getInstance().scheduleProbe(
-								"192.168.100.253", "5280",
-								tb_userName.getText(),
-								sb.toString(), false,
-								"./logout.html");
-						AutoLoginScheduler.getInstance().getScheduler().start();
+						password = sb.toString();
+						userName = tb_userName.getText();
+						startProbeTimer(60 * 1000L);
 					} catch (Exception e) {
-						setTimerStop();
+						stopTimer(UITimer);
+						stopTimer(probeTimer);
 						button.setText("开始探测");
-						JOptionPane.showMessageDialog(null, e, "错误",
-								JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, e, "错误", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			}
@@ -160,62 +160,69 @@ public class MainWindow {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				File f = new File("./logout.html");
-				if(!f.exists()){
-					JOptionPane.showMessageDialog(null, "登出文件不存在", "错误",
-							JOptionPane.WARNING_MESSAGE);
+				if (!f.exists()) {
+					JOptionPane.showMessageDialog(null, "登出文件不存在", "错误", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				try {
 					desktop = Desktop.getDesktop();
 					desktop.open(f);
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, e, "错误",
-							JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, e, "错误", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
 		button_1.setBounds(286, 66, 138, 39);
 		frame.getContentPane().add(button_1);
-		
+
 		lb_output = new JLabel("");
 		lb_output.setBounds(10, 115, 334, 15);
 		frame.getContentPane().add(lb_output);
-		
+
 		lb_time = new JLabel("");
 		lb_time.setHorizontalAlignment(SwingConstants.RIGHT);
 		lb_time.setBounds(354, 115, 70, 15);
 		frame.getContentPane().add(lb_time);
 	}
 
-	private void setTimerRefresh() {
-		timeAction = new Timer();
-		final long interval = 1000;
-		try {
-			UIParamClass.getInstance().setOutputLine("建立UI刷新线程，计时器间隔:"+interval+"ms");
-		} catch (SchedulerException e1) {
-			lb_output.setText("UI参数实例初始化失败："+e1);
-		}
-		timeAction.schedule(new TimerTask() {
+	private void startUITimer(long interval) {
+		UITimer = new Timer();
+		UIParamClass.getInstance().setOutputLine("建立UI刷新线程，计时器间隔:" + interval + "ms");
+		UITimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				tb_lastCheck.setText(UIParamClass.getInstance().getLastCheckDate());
+				tb_status.setText(UIParamClass.getInstance().getCheckStatus());
+				lb_output.setText(UIParamClass.getInstance().getOutputLine());
+				lb_time.setText(getTime());
+			}
+		}, 0, interval);
+	}
+
+	private void startProbeTimer(long interval) {
+		probeTimer = new Timer();
+		probeTimer.schedule(new TimerTask() {
+
 			@Override
 			public void run() {
 				try {
-					tb_lastCheck.setText(UIParamClass.getInstance()
-							.getLastCheckDate());
-					tb_status.setText(UIParamClass.getInstance()
-							.getCheckStatus());
-					lb_output.setText(UIParamClass.getInstance().getOutputLine());
-					lb_time.setText(getTime());
-				} catch (SchedulerException e) {
-					lb_output.setText("UI刷新线程失败："+e);
+					if (!Prob.probe()) {
+						UIParamClass.getInstance().setOutputLine("准备登陆...");
+						Login.postLogin(userName, password, writePath);
+					}
+				} catch (Exception e) {
+					UIParamClass.getInstance().setOutputLine("探測或登錄出錯，錯誤信息:" + e);
 				}
 			}
-		}, 0,interval);
+
+		}, 0, interval);
 	}
-	private void setTimerStop(){
-		this.timeAction.cancel();
+
+	private void stopTimer(Timer timer) {
+		timer.cancel();
 	}
-	
-	private String getTime(){
+
+	private String getTime() {
 		return new SimpleDateFormat("HH:mm:ss").format(new Date());
 	}
 }

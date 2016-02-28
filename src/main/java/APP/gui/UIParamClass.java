@@ -1,12 +1,10 @@
 package APP.gui;
 
-import org.quartz.SchedulerException;
-
 public class UIParamClass {
 
 	private volatile static UIParamClass instance;
 
-	public static UIParamClass getInstance() throws SchedulerException {
+	public static UIParamClass getInstance() {
 		if (instance == null) {
 			synchronized (UIParamClass.class) {
 				if (instance == null) {

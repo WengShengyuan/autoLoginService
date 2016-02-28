@@ -15,12 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class NetUtils {
-	/**
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(String[] args) throws Exception {
-	}
 
 	public static String get(String pageUrl, String encoding) throws Exception {
 
