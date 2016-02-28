@@ -9,5 +9,3 @@
 ## 生成.jar
 
 Export Runnable Jar.
-
-主类: MainWindow.java
