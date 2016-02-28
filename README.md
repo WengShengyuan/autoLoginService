@@ -8,4 +8,5 @@
 
 ## 生成.jar
 
-Export Runnable Jar.
+主类MainWindow.java
+
