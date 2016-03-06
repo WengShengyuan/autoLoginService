@@ -45,6 +45,9 @@ public class MainWindow {
 	private String port = "5280";
 	private String writePath = "./logout.html";
 
+	private long UIRefreshInterval = 1000L;
+	private long probeInterval = 10 * 1000L;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -112,7 +115,7 @@ public class MainWindow {
 					lb_output.setText("线程终止。");
 				} else {
 					button.setText("探测中...");
-					startUITimer(1000L);
+					startUITimer(UIRefreshInterval);
 					inDetect = true;
 					try {
 						StringBuilder sb = new StringBuilder();
@@ -122,7 +125,7 @@ public class MainWindow {
 						}
 						password = sb.toString();
 						userName = tb_userName.getText();
-						startProbeTimer(60 * 1000L);
+						startProbeTimer(probeInterval);
 					} catch (Exception e) {
 						stopTimer(UITimer);
 						stopTimer(probeTimer);
